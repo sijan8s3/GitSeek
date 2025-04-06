@@ -11,6 +11,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.sijan.gitseek.search_user.presentation.SearchUserScreenRoot
+import com.sijan.gitseek.search_user.presentation.SearchUserViewModel
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Composable function to set up the app's navigation graph.
@@ -30,25 +33,20 @@ fun AppNavigation(
         navigation<NavigationRoute.GitSeekGraph>(
             startDestination = NavigationRoute.SearchUser,
         ) {
-            composable<NavigationRoute.SearchUser>{
-                SearchUserScreen()
+            composable<NavigationRoute.SearchUser> {
+                val viewModel: SearchUserViewModel = koinViewModel()
+                SearchUserScreenRoot(
+                    viewModel = viewModel,
+                    onFollowersClicked = { username ->
+                    },
+                    onFollowingClicked = { username ->
+                    }
+                )
+
             }
 
         }
 
     }
 
-}
-
-
-@Composable
-fun SearchUserScreen(
-){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Search User")
-    }
 }
