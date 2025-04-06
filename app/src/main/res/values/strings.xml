@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Git Seek</string>
+    <string name="error_request_timeout">The network request took too long and timed out. Please try again.</string>
+    <string name="error_too_many_requests">You have made too many requests in a short period. Please wait and try again later.</string>
+    <string name="error_server">A server error occurred. Please try again later.</string>
+    <string name="error_serialization">An error occurred while processing the data. Please try again.</string>
+    <string name="error_unknown">An unexpected error occurred. Please try again later.</string>
+    <string name="error_no_internet">No internet connection. Please check your connection and try again.</string>
+    <string name="error_unauthorized">Access denied. Please check your credentials or account status.</string>
 </resources>
