@@ -5,6 +5,7 @@ import com.sijan.gitseek.followers.domain.Follower
 
 data class FollowersState(
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val username: String? = null,
     val followers: List<Follower> = emptyList(),
     val error: NetworkError? = null

@@ -29,7 +29,19 @@ class FollowingsViewModel(
                 loadFollowings()
             }
 
+            FollowingsAction.OnRefresh -> {
+                refreshFollowings()
+            }
+
             else -> Unit
+        }
+    }
+
+    private fun refreshFollowings() {
+        viewModelScope.launch {
+            _state.update { it.copy(isRefreshing = true) }
+            loadFollowings()
+            _state.update { it.copy(isRefreshing = false) }
         }
     }
 
@@ -37,6 +49,8 @@ class FollowingsViewModel(
         _state.update {
             it.copy(username = username)
         }
+        loadFollowings(username)
+
     }
 
     fun loadFollowings(
@@ -44,14 +58,15 @@ class FollowingsViewModel(
     ) {
         viewModelScope.launch {
             _state.update {
-                it.copy(isLoading = true,
+                it.copy(
+                    isLoading = true,
                     error = null,
                     followings = emptyList()
-                    )
+                )
             }
 
             followingsDataSource.getUserFollowings(
-                username = username?: state.value.username?: ""
+                username = username ?: state.value.username ?: ""
             ).onSuccess { followings ->
                 _state.update {
                     it.copy(

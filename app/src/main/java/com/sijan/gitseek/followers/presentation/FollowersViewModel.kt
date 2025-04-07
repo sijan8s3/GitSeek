@@ -1,10 +1,12 @@
 package com.sijan.gitseek.followers.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sijan.gitseek.core.domain.utils.onError
 import com.sijan.gitseek.core.domain.utils.onSuccess
 import com.sijan.gitseek.followers.domain.FollowersDataSource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -27,15 +29,28 @@ class FollowersViewModel(
             FollowersAction.OnRetryClicked -> {
                 loadFollowers()
             }
+            FollowersAction.OnRefresh -> {
+                refreshFollowers()
+            }
 
             else -> Unit
         }
+    }
+
+    private fun refreshFollowers() {
+        viewModelScope.launch {
+            _state.update { it.copy(isRefreshing = true) }
+            loadFollowers()
+            _state.update { it.copy(isRefreshing = false) }
+        }
+
     }
 
     fun setUserName(username: String) {
         _state.update {
             it.copy(username = username)
         }
+        loadFollowers(username)
     }
 
     fun loadFollowers(

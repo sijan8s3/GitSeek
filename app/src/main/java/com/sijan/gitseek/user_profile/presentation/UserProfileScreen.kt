@@ -34,12 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.sijan.gitseek.core.domain.utils.NetworkError
 import com.sijan.gitseek.core.presentation.components.HeaderBackIcon
-import com.sijan.gitseek.core.presentation.components.ProgressIndicator
 import com.sijan.gitseek.core.presentation.utils.toString
 import com.sijan.gitseek.search_user.domain.Profile
-import com.sijan.gitseek.user_profile.presentation.components.shimmerEffect
+import com.sijan.gitseek.core.presentation.utils.shimmerEffect
 
 @Composable
 fun UserProfileScreenRoot(
@@ -100,7 +98,6 @@ fun UserProfileScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             item {
                 HeaderBackIcon(

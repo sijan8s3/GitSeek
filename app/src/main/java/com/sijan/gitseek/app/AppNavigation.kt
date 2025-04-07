@@ -68,7 +68,6 @@ fun AppNavigation(
                 val viewModel: FollowersViewModel = koinViewModel()
                 LaunchedEffect(key1 = Unit){
                     viewModel.setUserName(username)
-                    viewModel.loadFollowers(username)
                 }
                 FollowersListScreenRoot(
                     viewModel = viewModel,
@@ -89,7 +88,6 @@ fun AppNavigation(
                 val viewModel: FollowingsViewModel = koinViewModel()
                 LaunchedEffect(key1 = Unit){
                     viewModel.setUserName(username)
-                    viewModel.loadFollowings(username)
                 }
                 FollowingsListScreenRoot(
                     viewModel = viewModel,
