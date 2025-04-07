@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -31,9 +32,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.sijan.gitseek.core.presentation.components.ProgressIndicator
 import com.sijan.gitseek.core.presentation.utils.toString
 import com.sijan.gitseek.search_user.domain.Profile
 import com.sijan.gitseek.search_user.presentation.components.UserSearchBar
@@ -117,12 +120,7 @@ fun SearchUserScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (state.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            ProgressIndicator()
         }
         if (state.error != null && !state.isLoading) {
             Column(
@@ -130,7 +128,9 @@ fun SearchUserScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = state.error.toString(context = context))
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = state.error.toString(context = context))
                 Button(onClick = {
                     onAction(SearchUserAction.OnRetryClicked)
                 }) {

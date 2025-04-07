@@ -1,16 +1,24 @@
 package com.sijan.gitseek.app
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
+import com.sijan.gitseek.app.NavigationRoute.FollowersList
+import com.sijan.gitseek.app.NavigationRoute.GitSeekGraph
+import com.sijan.gitseek.app.NavigationRoute.SearchUser
+import com.sijan.gitseek.followers.presentation.FollowersListScreenRoot
+import com.sijan.gitseek.followers.presentation.FollowersViewModel
 import com.sijan.gitseek.search_user.presentation.SearchUserScreenRoot
 import com.sijan.gitseek.search_user.presentation.SearchUserViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -27,22 +35,42 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavigationRoute.GitSeekGraph,
+        startDestination = GitSeekGraph,
     ) {
 
-        navigation<NavigationRoute.GitSeekGraph>(
-            startDestination = NavigationRoute.SearchUser,
+        navigation<GitSeekGraph>(
+            startDestination = SearchUser,
         ) {
-            composable<NavigationRoute.SearchUser> {
+            composable<SearchUser> {
                 val viewModel: SearchUserViewModel = koinViewModel()
                 SearchUserScreenRoot(
                     viewModel = viewModel,
                     onFollowersClicked = { username ->
+                        navController.navigate(FollowersList(username))
                     },
                     onFollowingClicked = { username ->
                     }
                 )
 
+            }
+
+            composable<FollowersList> { backStackEntry ->
+                val profile = backStackEntry.toRoute<FollowersList>()
+                val username = profile.userName
+                Log.d("TAG", "AppNavigation: username: $username ")
+                val viewModel: FollowersViewModel = koinViewModel()
+                LaunchedEffect(key1 = Unit){
+                    viewModel.setUserName(username)
+                    viewModel.loadFollowers(username)
+                }
+                FollowersListScreenRoot(
+                    viewModel = viewModel,
+                    onUserProfileClicked = { username ->
+                    },
+                    onBackClicked = {
+                        navController.navigateUp()
+                    }
+                )
             }
 
         }
