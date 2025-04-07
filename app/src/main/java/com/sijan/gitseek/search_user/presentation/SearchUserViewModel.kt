@@ -2,21 +2,15 @@ package com.sijan.gitseek.search_user.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sijan.gitseek.core.domain.utils.onError
-import com.sijan.gitseek.core.domain.utils.onSuccess
-import com.sijan.gitseek.search_user.domain.UserDataSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SearchUserViewModel(
-    private val userDataSource: UserDataSource
-) : ViewModel() {
+class SearchUserViewModel() : ViewModel() {
 
     // StateFlow to hold the UI state
     private val _state = MutableStateFlow(SearchUserState())
@@ -35,55 +29,36 @@ class SearchUserViewModel(
     fun onAction(action: SearchUserAction) {
         when (action) {
             is SearchUserAction.OnUsernameChange -> {
+                val error = validateUsername(action.username)
                 _state.value = _state.value.copy(
-                    username = action.username
+                    username = action.username,
+                    error = error
                 )
             }
+            SearchUserAction.OnSearchClicked -> {
+                val username = state.value.username.trim()
+                val error = validateUsername(username)
 
-            SearchUserAction.OnRetryClicked -> {
-                getUserProfile()
-            }
-
-            SearchUserAction.OnSearchClicked -> getUserProfile()
-           else -> Unit
-        }
-
-    }
-
-    private fun getUserProfile() {
-        if (state.value.username.isBlank()) {
-            return
-        }
-
-        viewModelScope.launch {
-            _state.update {
-                it.copy(isLoading = true,
-                    profile = null,
-                    error = null
-                )
-            }
-
-            userDataSource.getUserProfile(state.value.username)
-                .onSuccess { user ->
-                    _state.update {
-                        it.copy(
-                            profile = user,
-                            isLoading = false,
-                            error = null
-                        )
+                if (error != null) {
+                    _state.value = _state.value.copy(error = error)
+                } else {
+                    viewModelScope.launch {
+                        _events.send(SearchUserEvent.NavigateToUserProfile(username))
                     }
-                }.onError { error ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            error = error,
-                            profile = null
-                        )
-                    }
-                    _events.send(SearchUserEvent.Error(error))
                 }
+            }
         }
     }
 
+    private fun validateUsername(username: String): String? {
+        val trimmedUsername = username.trim()
+        val usernamePattern = "^[a-zA-Z0-9-]+$".toRegex()
+
+        return when {
+            trimmedUsername.isBlank() -> "Username cannot be empty"
+            !usernamePattern.matches(trimmedUsername) -> "Username can only contain alphanumeric characters and dashes"
+            else -> null
+        }
+    }
 
 }

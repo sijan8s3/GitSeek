@@ -1,7 +1,8 @@
 package com.sijan.gitseek.user_profile.data.mappers
 
-import com.sijan.gitseek.search_user.data.networking.dto.ProfileDto
-import com.sijan.gitseek.search_user.domain.Profile
+import com.sijan.gitseek.user_profile.data.networking.dto.ProfileDto
+import com.sijan.gitseek.user_profile.domain.Profile
+
 
 fun ProfileDto.toProfile(): Profile {
     return Profile(

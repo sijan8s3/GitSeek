@@ -23,6 +23,7 @@ import com.sijan.gitseek.R
 @Composable
 fun UserSearchBar(
     searchQuery: String,
+    error: String?,
     onSearchQueryChange: (String) -> Unit,
     onImeSearch: () -> Unit,
     modifier: Modifier = Modifier
@@ -44,6 +45,15 @@ fun UserSearchBar(
             )
         },
         singleLine = true,
+        isError = error != null,
+        supportingText = {
+            if (error != null) {
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
         keyboardActions = KeyboardActions(
             onSearch = { onImeSearch() }
         ),

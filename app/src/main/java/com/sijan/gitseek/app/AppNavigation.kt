@@ -51,14 +51,10 @@ fun AppNavigation(
                 val viewModel: SearchUserViewModel = koinViewModel()
                 SearchUserScreenRoot(
                     viewModel = viewModel,
-                    onFollowersClicked = { username ->
-                        navController.navigate(FollowersList(username))
-                    },
-                    onFollowingClicked = { username ->
-                        navController.navigate(FollowingList(username))
+                    navigateToUserProfile = { username ->
+                        navController.navigate(UserProfile(username))
                     }
                 )
-
             }
 
             composable<FollowersList> { backStackEntry ->
