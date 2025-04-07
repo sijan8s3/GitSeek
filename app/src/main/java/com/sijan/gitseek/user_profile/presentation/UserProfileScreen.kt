@@ -36,6 +36,7 @@ import coil3.compose.AsyncImage
 import com.sijan.gitseek.core.presentation.components.HeaderBackIcon
 import com.sijan.gitseek.core.presentation.utils.toString
 import com.sijan.gitseek.core.presentation.utils.shimmerEffect
+import com.sijan.gitseek.followers.presentation.FollowersAction
 import com.sijan.gitseek.user_profile.domain.Profile
 
 @Composable
@@ -111,24 +112,6 @@ fun UserProfileScreen(
                 items(1) { // Show shimmer item as placeholders
                     ShimmerProfileItem()
                 }
-            } else if (state.error != null) {
-                item {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            textAlign = TextAlign.Center,
-                            text = state.error.toString(context = context)
-                        )
-                        Button(onClick = {
-                            onAction(UserProfileAction.OnRetryClicked)
-                        }) {
-                            Text(text = "Retry")
-                        }
-                    }
-                }
             } else {
                 state.profile?.let {
                     item {
@@ -141,100 +124,118 @@ fun UserProfileScreen(
                 }
             }
         }
+
+        if (state.error != null) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = state.error.toString(context = context)
+                )
+                Button(onClick = {
+                    onAction(UserProfileAction.OnRetryClicked)
+                }) {
+                    Text(text = "Retry")
+                }
+            }
+        }
     }
 }
 
 
-@Composable
-fun ProfileSection(
-    profile: Profile,
-    onFollowersClick: () -> Unit,
-    onFollowingClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
+    @Composable
+    fun ProfileSection(
+        profile: Profile,
+        onFollowersClick: () -> Unit,
+        onFollowingClick: () -> Unit
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            AsyncImage(
-                model = profile.avatarUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(96.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AsyncImage(
+                    model = profile.avatarUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(96.dp)
+                        .clip(CircleShape)
+                )
+                Spacer(modifier = Modifier.width(20.dp))
+                Column {
+                    Text(
+                        text = profile.name ?: profile.username,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = "@${profile.username}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            profile.description?.let {
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = profile.name ?: profile.username,
-                    style = MaterialTheme.typography.headlineSmall
+                    text = it,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${profile.followers} followers",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.clickable { onFollowersClick() }
                 )
                 Text(
-                    text = "@${profile.username}",
+                    text = "${profile.following} following",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    modifier = Modifier.clickable { onFollowingClick() }
                 )
             }
         }
-
-        profile.description?.let {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "${profile.followers} followers",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.clickable { onFollowersClick() }
-            )
-            Text(
-                text = "${profile.following} following",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.clickable { onFollowingClick() }
-            )
-        }
     }
-}
 
 
-@Composable
-fun ShimmerProfileItem(modifier: Modifier = Modifier) {
-    Row(modifier = modifier.padding(16.dp)) {
-        Box(
-            modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .shimmerEffect()
-        )
-        Spacer(modifier = Modifier.width(20.dp))
-        Column {
+    @Composable
+    fun ShimmerProfileItem(modifier: Modifier = Modifier) {
+        Row(modifier = modifier.padding(16.dp)) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp)
+                    .size(96.dp)
+                    .clip(CircleShape)
                     .shimmerEffect()
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(20.dp)
-                    .shimmerEffect()
-            )
+            Spacer(modifier = Modifier.width(20.dp))
+            Column {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(20.dp)
+                        .shimmerEffect()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(20.dp)
+                        .shimmerEffect()
+                )
+            }
         }
     }
-}
 
 
