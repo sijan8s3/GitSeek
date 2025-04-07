@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -21,11 +22,7 @@ class UserProfileViewModel(
 
     // StateFlow to hold the UI state
     private val _state = MutableStateFlow(UserProfileState())
-    val state = _state.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        _state.value
-    )
+    val state = _state.asStateFlow()
 
     // Channel for one-time events like error messages
     private val _events = Channel<UserProfileEvent>()

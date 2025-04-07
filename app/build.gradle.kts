@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.testImplementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -79,4 +81,11 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.ktor3)
+
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.kotlinx.coroutines.test.v190)
+    testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation (libs.androidx.core.testing)
+
 }

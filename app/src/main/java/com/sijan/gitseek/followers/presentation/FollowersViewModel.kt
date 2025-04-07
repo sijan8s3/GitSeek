@@ -1,12 +1,10 @@
 package com.sijan.gitseek.followers.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sijan.gitseek.core.domain.utils.onError
 import com.sijan.gitseek.core.domain.utils.onSuccess
 import com.sijan.gitseek.followers.domain.FollowersDataSource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
