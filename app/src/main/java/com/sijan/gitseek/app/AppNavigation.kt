@@ -106,7 +106,6 @@ fun AppNavigation(
             composable<UserProfile> { backStackEntry ->
                 val profile = backStackEntry.toRoute<UserProfile>()
                 val username = profile.userName
-                Log.d("TAG", "AppNavigation: username for profile: $username ")
                 val viewModel: UserProfileViewModel = koinViewModel()
                 LaunchedEffect(key1 = Unit){
                     viewModel.setUsername(username)

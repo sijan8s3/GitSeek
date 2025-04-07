@@ -7,6 +7,7 @@ import com.sijan.gitseek.core.domain.utils.onError
 import com.sijan.gitseek.core.domain.utils.onSuccess
 import com.sijan.gitseek.search_user.domain.UserDataSource
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -49,6 +50,8 @@ class UserProfileViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isRefreshing = true) }
             Log.d("TAG", "refreshUserProfile: refreshing")
+            // Added a delay for demonstration purposes
+            delay(1000) // 1 second delay
             getUserProfile(username = state.value.username)
             _state.update { it.copy(isRefreshing = false) }
         }

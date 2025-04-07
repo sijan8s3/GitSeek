@@ -4,6 +4,7 @@ package com.sijan.gitseek.user_profile.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,10 +34,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.sijan.gitseek.core.domain.utils.NetworkError
 import com.sijan.gitseek.core.presentation.components.HeaderBackIcon
 import com.sijan.gitseek.core.presentation.components.ProgressIndicator
 import com.sijan.gitseek.core.presentation.utils.toString
 import com.sijan.gitseek.search_user.domain.Profile
+import com.sijan.gitseek.user_profile.presentation.components.shimmerEffect
+
 @Composable
 fun UserProfileScreenRoot(
     modifier: Modifier = Modifier,
@@ -85,7 +89,6 @@ fun UserProfileScreen(
 ) {
     val context = LocalContext.current
 
-    // Remember the pull-to-refresh state
     val pullToRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
@@ -96,6 +99,8 @@ fun UserProfileScreen(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             item {
                 HeaderBackIcon(
@@ -107,12 +112,10 @@ fun UserProfileScreen(
             }
 
             if (state.isLoading) {
-                item {
-                    ProgressIndicator()
+                items(1) { // Show 3 shimmer items as placeholders
+                    ShimmerProfileItem()
                 }
-            }
-
-            if (state.error != null && !state.isLoading) {
+            } else if (state.error != null) {
                 item {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -130,15 +133,15 @@ fun UserProfileScreen(
                         }
                     }
                 }
-            }
-
-            state.profile?.let {
-                item {
-                    ProfileSection(
-                        profile = it,
-                        onFollowersClick = { onAction(UserProfileAction.onFollowersClicked) },
-                        onFollowingClick = { onAction(UserProfileAction.onFollowingClicked) }
-                    )
+            } else {
+                state.profile?.let {
+                    item {
+                        ProfileSection(
+                            profile = it,
+                            onFollowersClick = { onAction(UserProfileAction.onFollowersClicked) },
+                            onFollowingClick = { onAction(UserProfileAction.onFollowingClicked) }
+                        )
+                    }
                 }
             }
         }
@@ -204,6 +207,35 @@ fun ProfileSection(
                 text = "${profile.following} following",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.clickable { onFollowingClick() }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ShimmerProfileItem(modifier: Modifier = Modifier) {
+    Row(modifier = modifier.padding(16.dp)) {
+        Box(
+            modifier = Modifier
+                .size(96.dp)
+                .clip(CircleShape)
+                .shimmerEffect()
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+                    .shimmerEffect()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(20.dp)
+                    .shimmerEffect()
             )
         }
     }
