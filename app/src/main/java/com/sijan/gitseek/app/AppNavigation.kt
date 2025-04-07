@@ -15,10 +15,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.sijan.gitseek.app.NavigationRoute.FollowersList
+import com.sijan.gitseek.app.NavigationRoute.FollowingList
 import com.sijan.gitseek.app.NavigationRoute.GitSeekGraph
 import com.sijan.gitseek.app.NavigationRoute.SearchUser
 import com.sijan.gitseek.followers.presentation.FollowersListScreenRoot
 import com.sijan.gitseek.followers.presentation.FollowersViewModel
+import com.sijan.gitseek.followings.presentation.FollowingsListScreenRoot
+import com.sijan.gitseek.followings.presentation.FollowingsViewModel
 import com.sijan.gitseek.search_user.presentation.SearchUserScreenRoot
 import com.sijan.gitseek.search_user.presentation.SearchUserViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -49,6 +52,7 @@ fun AppNavigation(
                         navController.navigate(FollowersList(username))
                     },
                     onFollowingClicked = { username ->
+                        navController.navigate(FollowingList(username))
                     }
                 )
 
@@ -64,6 +68,26 @@ fun AppNavigation(
                     viewModel.loadFollowers(username)
                 }
                 FollowersListScreenRoot(
+                    viewModel = viewModel,
+                    onUserProfileClicked = { username ->
+                    },
+                    onBackClicked = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable<FollowingList> { backStackEntry ->
+                val profile = backStackEntry.toRoute<FollowingList>()
+                val username = profile.userName
+                Log.d("TAG", "AppNavigation: username: $username ")
+                val viewModel: FollowingsViewModel = koinViewModel()
+                LaunchedEffect(key1 = Unit){
+                    viewModel.setUserName(username)
+                    viewModel.loadFollowings(username)
+                }
+                FollowingsListScreenRoot(
                     viewModel = viewModel,
                     onUserProfileClicked = { username ->
                     },
