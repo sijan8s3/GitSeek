@@ -1,6 +1,9 @@
 package com.sijan.gitseek.di
 
 import com.sijan.gitseek.core.data.networking.HttpClientFactory
+import com.sijan.gitseek.followers.data.networking.RemoteFollowersDataSource
+import com.sijan.gitseek.followers.domain.FollowersDataSource
+import com.sijan.gitseek.followers.presentation.FollowersViewModel
 import com.sijan.gitseek.search_user.data.networking.RemoteUserDataSource
 import com.sijan.gitseek.search_user.domain.UserDataSource
 import com.sijan.gitseek.search_user.presentation.SearchUserViewModel
@@ -23,7 +26,9 @@ val appModule = module {
     single { HttpClientFactory.create(CIO.create()) }
 
     singleOf(::RemoteUserDataSource).bind<UserDataSource>()
+    singleOf(::RemoteFollowersDataSource).bind<FollowersDataSource>()
 
     viewModelOf(::SearchUserViewModel)
+    viewModelOf(::FollowersViewModel)
 
 }

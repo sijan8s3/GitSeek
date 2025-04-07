@@ -10,12 +10,12 @@ sealed interface NavigationRoute{
     data object SearchUser: NavigationRoute
 
     @Serializable
-    data class ProfileDetail(val userId: String): NavigationRoute
+    data class ProfileDetail(val userName: String): NavigationRoute
 
     @Serializable
-    data class FollowersList(val userId: String): NavigationRoute
+    data class FollowersList(val userName: String): NavigationRoute
 
     @Serializable
-    data class FollowingList(val userId: String): NavigationRoute
+    data class FollowingList(val userName: String): NavigationRoute
 
 }
