@@ -1,4 +1,4 @@
-package com.sijan.gitseek.user_profile.presentation.components
+package com.sijan.gitseek.core.presentation.utils
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
