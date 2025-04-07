@@ -10,6 +10,7 @@ import com.sijan.gitseek.followings.presentation.FollowingsViewModel
 import com.sijan.gitseek.search_user.data.networking.RemoteUserDataSource
 import com.sijan.gitseek.search_user.domain.UserDataSource
 import com.sijan.gitseek.search_user.presentation.SearchUserViewModel
+import com.sijan.gitseek.user_profile.presentation.UserProfileViewModel
 import io.ktor.client.engine.cio.CIO
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
@@ -31,10 +32,12 @@ val appModule = module {
     singleOf(::RemoteUserDataSource).bind<UserDataSource>()
     singleOf(::RemoteFollowersDataSource).bind<FollowersDataSource>()
     singleOf(::RemoteFollowingsDataSource).bind<FollowingsDataSource>()
+    singleOf(::RemoteUserDataSource).bind<UserDataSource>()
 
     viewModelOf(::SearchUserViewModel)
     viewModelOf(::FollowersViewModel)
     viewModelOf(::FollowingsViewModel)
+    viewModelOf(::UserProfileViewModel)
 
 
 }

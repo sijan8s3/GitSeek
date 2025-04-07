@@ -18,12 +18,15 @@ import com.sijan.gitseek.app.NavigationRoute.FollowersList
 import com.sijan.gitseek.app.NavigationRoute.FollowingList
 import com.sijan.gitseek.app.NavigationRoute.GitSeekGraph
 import com.sijan.gitseek.app.NavigationRoute.SearchUser
+import com.sijan.gitseek.app.NavigationRoute.UserProfile
 import com.sijan.gitseek.followers.presentation.FollowersListScreenRoot
 import com.sijan.gitseek.followers.presentation.FollowersViewModel
 import com.sijan.gitseek.followings.presentation.FollowingsListScreenRoot
 import com.sijan.gitseek.followings.presentation.FollowingsViewModel
 import com.sijan.gitseek.search_user.presentation.SearchUserScreenRoot
 import com.sijan.gitseek.search_user.presentation.SearchUserViewModel
+import com.sijan.gitseek.user_profile.presentation.UserProfileScreenRoot
+import com.sijan.gitseek.user_profile.presentation.UserProfileViewModel
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -70,6 +73,7 @@ fun AppNavigation(
                 FollowersListScreenRoot(
                     viewModel = viewModel,
                     onUserProfileClicked = { username ->
+                        navController.navigate(UserProfile(username))
                     },
                     onBackClicked = {
                         navController.navigateUp()
@@ -90,9 +94,32 @@ fun AppNavigation(
                 FollowingsListScreenRoot(
                     viewModel = viewModel,
                     onUserProfileClicked = { username ->
+                        navController.navigate(UserProfile(username))
                     },
                     onBackClicked = {
                         navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable<UserProfile> { backStackEntry ->
+                val profile = backStackEntry.toRoute<UserProfile>()
+                val username = profile.userName
+                val viewModel: UserProfileViewModel = koinViewModel()
+                LaunchedEffect(key1 = Unit){
+                    viewModel.setUsername(username)
+                }
+                UserProfileScreenRoot(
+                    viewModel = viewModel,
+                    onBackClicked = {
+                        navController.navigateUp()
+                    },
+                    onFollowersClicked = { username ->
+                        navController.navigate(FollowersList(username))
+                    },
+                    onFollowingClicked = { username ->
+                        navController.navigate(FollowingList(username))
                     }
                 )
             }
@@ -102,3 +129,4 @@ fun AppNavigation(
     }
 
 }
+
