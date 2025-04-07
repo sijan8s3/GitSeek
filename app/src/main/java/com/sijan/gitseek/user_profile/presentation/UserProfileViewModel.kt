@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sijan.gitseek.core.domain.utils.onError
 import com.sijan.gitseek.core.domain.utils.onSuccess
-import com.sijan.gitseek.search_user.domain.UserDataSource
+import com.sijan.gitseek.user_profile.domain.UserDataSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

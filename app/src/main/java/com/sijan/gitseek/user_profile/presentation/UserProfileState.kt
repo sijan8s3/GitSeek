@@ -1,7 +1,7 @@
 package com.sijan.gitseek.user_profile.presentation
 
 import com.sijan.gitseek.core.domain.utils.NetworkError
-import com.sijan.gitseek.search_user.domain.Profile
+import com.sijan.gitseek.user_profile.domain.Profile
 
 data class UserProfileState(
     val isRefreshing: Boolean = false,

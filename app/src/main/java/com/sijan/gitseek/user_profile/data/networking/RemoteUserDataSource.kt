@@ -5,10 +5,10 @@ import com.sijan.gitseek.core.data.networking.safeApiCall
 import com.sijan.gitseek.core.domain.utils.NetworkError
 import com.sijan.gitseek.core.domain.utils.Result
 import com.sijan.gitseek.core.domain.utils.map
-import com.sijan.gitseek.search_user.data.mappers.toProfile
-import com.sijan.gitseek.search_user.data.networking.dto.ProfileDto
-import com.sijan.gitseek.search_user.domain.Profile
-import com.sijan.gitseek.search_user.domain.UserDataSource
+import com.sijan.gitseek.user_profile.data.mappers.toProfile
+import com.sijan.gitseek.user_profile.data.networking.dto.ProfileDto
+import com.sijan.gitseek.user_profile.domain.Profile
+import com.sijan.gitseek.user_profile.domain.UserDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 

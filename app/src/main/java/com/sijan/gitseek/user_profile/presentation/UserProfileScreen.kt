@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,8 +35,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.sijan.gitseek.core.presentation.components.HeaderBackIcon
 import com.sijan.gitseek.core.presentation.utils.toString
-import com.sijan.gitseek.search_user.domain.Profile
 import com.sijan.gitseek.core.presentation.utils.shimmerEffect
+import com.sijan.gitseek.user_profile.domain.Profile
 
 @Composable
 fun UserProfileScreenRoot(
@@ -109,7 +108,7 @@ fun UserProfileScreen(
             }
 
             if (state.isLoading) {
-                items(1) { // Show 3 shimmer items as placeholders
+                items(1) { // Show shimmer item as placeholders
                     ShimmerProfileItem()
                 }
             } else if (state.error != null) {
